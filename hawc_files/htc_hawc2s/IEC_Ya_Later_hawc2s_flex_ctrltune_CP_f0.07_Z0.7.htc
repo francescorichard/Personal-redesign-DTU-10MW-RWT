@@ -1,0 +1,348 @@
+; DTU 10MW RWT. https://gitlab.windenergy.dtu.dk/hawc-reference-models/dtu-10-mw
+;   Modified from version 9.2a for LAC course
+;
+  begin new_htc_structure;	material properties, orientations and constraints of bodies
+;body_eigenanalysis_file_name bodyeig/dtu_10mw_body.eig;
+;structure_eigenanalysis_file_name bodyeig/dtu_10mw_struct.eig;
+;-------------------------------------------------------------------------------------------------------------------------------
+    begin main_body;	tower
+      name	tower;
+      type	timoschenko;
+      nbodies	1;
+      node_distribution	c2_def;
+      damping_posdef	0 0 0 0.00412 0.00412 0.00045;	tuned by Larh
+      begin timoschenko_input;
+        filename	./data/DTU_10MW_RWT_Tower_st.dat;
+        set	1 1;	1 1=flexibe, 1 2=stiff
+      end timoschenko_input;
+      begin c2_def;	definition of centerline in main_body coordinates
+        nsec	11;
+        sec	1 0 0 0 0;	x, y, z, twist
+        sec	2 0 0 -11.5 0;
+        sec	3 0 0 -23 0;
+        sec	4 0 0 -34.5 0;
+        sec	5 0 0 -46 0;
+        sec	6 0 0 -57.5 0;
+        sec	7 0 0 -69 0;
+        sec	8 0 0 -80.5 0;
+        sec	9 0 0 -92 0;
+        sec	10 0 0 -103.5 0;
+        sec	11 0 0 -115.63 0;
+      end c2_def;
+    end main_body;
+;
+    begin main_body;	towertop
+      name	towertop;
+      type	timoschenko;
+      nbodies	1;
+      node_distribution	c2_def;
+      damping_posdef	0 0 0 0 0 0;
+      concentrated_mass	2 0 2.687 0.30061 446040 4106000 410600 4106000;	nacelle mass and inertia corrected by Anyd 25/4/13
+      begin timoschenko_input;
+        filename	./data/DTU_10MW_RWT_Towertop_st.dat;
+        set	1 2;	1 1=flexibe, 1 2=stiff
+      end timoschenko_input;
+      begin c2_def;	Definition of centerline (main_body coordinates)
+        nsec	2;
+        sec	1 0 0 0 0;	x,y,z,twist
+        sec	2 0 0 -2.75 0;
+      end c2_def;
+    end main_body;
+;
+    begin main_body;	shaft
+      name	shaft;
+      type	timoschenko;
+      nbodies	1;
+      node_distribution	c2_def;
+      damping_posdef	0 0 0 0.000465 0.000465 0.003983;	tuned by Anyd 23/5/13 to 31.45 log decr. damping for free free with stiff rotor and tower
+      concentrated_mass	1 0 0 0 0 0 0 3751000;	generator equivalent slow shaft re-tuned by Anyd 20/2/13
+      concentrated_mass	5 0 0 0 105520 0 0 325700;	hub mass and inertia re-tuned by Anyd 20/2/13
+      begin timoschenko_input;
+        filename	./data/DTU_10MW_RWT_Shaft_st.dat;
+        set	1 1;	1 1=flexibe, 1 2=stiff
+      end timoschenko_input;
+      begin c2_def;	definition of centerline in main_body coordinates
+        nsec	5;
+        sec	1 0 0 0 0;	x, y, z, twist
+        sec	2 0 0 1.5 0;
+        sec	3 0 0 3 0;
+        sec	4 0 0 4.4 0;	main bearing
+        sec	5 0 0 7.1 0;	rotor centre
+      end c2_def;
+    end main_body;
+;
+    begin main_body;	hub1
+      name	hub1;
+      type	timoschenko;
+      nbodies	1;
+      node_distribution	c2_def;
+      damping_posdef	0 0 0 0 0 0;
+      begin timoschenko_input;
+        filename	./data/DTU_10MW_RWT_Hub_st.dat;
+        set	1 2;	1 1=flexibe, 1 2=stiff
+      end timoschenko_input;
+      begin c2_def;	definition of centerline in main_body coordinates
+        nsec	2;
+        sec	1 0 0 0 0;	x, y, z, twist
+        sec	2 0 0 2.8 0;
+      end c2_def;
+    end main_body;
+;
+    begin main_body;	hub2
+      name	hub2;
+      copy_main_body	hub1;
+    end main_body;
+;
+    begin main_body;	hub3
+      name	hub3;
+      copy_main_body	hub1;
+    end main_body;
+;
+    begin main_body;	blade1
+      name	blade1;
+      type	timoschenko;
+      nbodies	10;
+      node_distribution	c2_def;
+      damping_posdef	0 0 0 0.00153 0.00255 0.00033;	3% damping tuned by tkim 23/03/13, unable to fit 3rd and higher mode
+      begin timoschenko_input;
+        filename	./data/IEC_Ya_Later_Blade_st.dat;
+        set	1 1;	1 1=flexibe, 1 2=stiff
+      end timoschenko_input;
+      begin c2_def;
+        nsec	27;
+        sec	1 0 7.14463e-05 4.52876e-16 -20;
+        sec	2 -2.10563e-05 -0.0124535 3.05936 -20;
+        sec	3 -0.00743231 -0.0254183 6.11873 -20;
+        sec	4 -0.019298 -0.027876 7.13855 -20;
+        sec	5 -0.0551993 -0.0287746 8.87267 -20;
+        sec	6 -0.129139 -0.0217429 10.6078 -20;
+        sec	7 -0.230131 -0.0130918 12.4461 -20;
+        sec	8 -0.294273 -0.00785908 13.4678 -20;
+        sec	9 -0.407093 -0.0049798 15.307 -19.676;
+        sec	10 -0.588044 -0.0183864 18.5755 -17.1117;
+        sec	11 -0.721129 -0.0511701 21.8416 -13.6492;
+        sec	12 -0.806735 -0.0959853 25.106 -10.6195;
+        sec	13 -0.853761 -0.151826 28.3698 -8.06037;
+        sec	14 -0.870846 -0.218759 31.6332 -6.0003;
+        sec	15 -0.866174 -0.296369 34.8968 -4.57427;
+        sec	16 -0.80963 -0.471727 41.0163 -2.29154;
+        sec	17 -0.730458 -0.70206 47.5442 -0.246212;
+        sec	18 -0.64691 -0.979013 54.0724 1.17127;
+        sec	19 -0.564125 -1.30965 60.6004 2.19857;
+        sec	20 -0.484829 -1.69695 67.128 3.04031;
+        sec	21 -0.411158 -2.14913 73.6553 3.72543;
+        sec	22 -0.336617 -2.70886 80.5903 4.2511;
+        sec	23 -0.316277 -2.844 82.1201 4.35294;
+        sec	24 -0.292392 -2.98305 83.6502 4.45119;
+        sec	25 -0.260885 -3.12643 85.1802 4.54603;
+        sec	26 -0.212005 -3.27303 86.7102 4.63784;
+        sec	27 -0.0916728 -3.40288 88.0745 4.68853;
+      end c2_def;
+    end main_body;
+;
+    begin main_body;	blade2
+      name	blade2;
+      copy_main_body	blade1;
+    end main_body;
+;
+    begin main_body;	blade3
+      name	blade3;
+      copy_main_body	blade1;
+    end main_body;
+;
+;-------------------------------------------------------------------------------------------------------------------------------
+    begin orientation;	orientations of body coordinate systems
+      begin base;	tower to ground
+        mbdy	tower;
+        inipos	0 0 0;	initial position of node 1
+        mbdy_eulerang	0 0 0;	same as global; zT down and yT downwind.
+      end base;
+;
+      begin relative;	towertop to tower
+        mbdy1	tower last;
+        mbdy2	towertop 1;
+        mbdy2_eulerang	0 0 0;	same as tower; zTT down and yTT downwind.
+      end relative;
+;
+      begin relative;	shaft to towertop
+        mbdy1	towertop last;
+        mbdy2	shaft 1;
+        mbdy2_eulerang	90 0 0;
+        mbdy2_eulerang	5 0 0;	5 deg tilt angle; zS directed upwind along shaft, xS parallel to ground
+        mbdy2_ini_rotvec_d1	0 0 -1 0.2;	initial shaft rotation
+      end relative;
+;
+      begin relative;	hub1 to shaft
+        mbdy1	shaft last;
+        mbdy2	hub1 1;
+        mbdy2_eulerang	-90 0 0;
+        mbdy2_eulerang	0 180 0;
+        mbdy2_eulerang	2.5 0 0;	2.5deg cone angle; yH downwind along shaft, zH outward towards blade tip
+      end relative;
+;
+      begin relative;	hub2 to shaft
+        mbdy1	shaft last;
+        mbdy2	hub2 1;
+        mbdy2_eulerang	-90 0 0;
+        mbdy2_eulerang	0 60 0;
+        mbdy2_eulerang	2.5 0 0;	2.5deg cone angle; yH downwind along shaft, zH outward towards blade tip
+      end relative;
+;
+      begin relative;	hub3 to shaft
+        mbdy1	shaft last;
+        mbdy2	hub3 1;
+        mbdy2_eulerang	-90 0 0;
+        mbdy2_eulerang	0 -60 0;
+        mbdy2_eulerang	2.5 0 0;	2.5deg cone angle; yH downwind along shaft, zH outward towards blade tip
+      end relative;
+;
+      begin relative;	blade1 to hub1
+        mbdy1	hub1 last;
+        mbdy2	blade1 1;
+        mbdy2_eulerang	0 0 0;	same as hub1; yB downwind along shaft, zB outward towards blade tip
+      end relative;
+;
+      begin relative;	blade2 to hub2
+        mbdy1	hub2 last;
+        mbdy2	blade2 1;
+        mbdy2_eulerang	0 0 0;	same as hub2; yB downwind along shaft, zB outward towards blade tip
+      end relative;
+;
+      begin relative;	blade3 to hub3
+        mbdy1	hub3 last;
+        mbdy2	blade3 1;
+        mbdy2_eulerang	0 0 0;	same as hub3; yB downwind along shaft, zB outward towards blade tip
+      end relative;
+;
+    end orientation;
+;
+;-------------------------------------------------------------------------------------------------------------------------------
+    begin constraint;	constraints of each body to another
+;
+      begin fix0;	tower fixed to ground in translation and rotation of node 1
+        mbdy	tower;
+      end fix0;
+;
+      begin fix1;	bottom of towertop rigidly fixed to top of tower
+        mbdy1	tower last;
+        mbdy2	towertop 1;
+      end fix1;
+;
+      begin bearing1;	shaft_rot: shaft rotates about its -z axis with respect to towertop
+        name	shaft_rot;
+        mbdy1	towertop last;
+        mbdy2	shaft 1;
+        bearing_vector	2 0 0 -1;
+      end bearing1;
+;
+      begin fix1;	bottom of hub1 rigidly fixed to shaft
+        mbdy1	shaft last;
+        mbdy2	hub1 1;
+      end fix1;
+;
+      begin fix1;	bottom of hub2 rigidly fixed to shaft
+        mbdy1	shaft last;
+        mbdy2	hub2 1;
+      end fix1;
+;
+      begin fix1;	bottom of hub3 rigidly fixed to shaft
+        mbdy1	shaft last;
+        mbdy2	hub3 1;
+      end fix1;
+;
+      begin bearing2;	pitch1: blade1 rotates about its -z axis with respect to hub
+        name	pitch1;
+        mbdy1	hub1 last;
+        mbdy2	blade1 1;
+        bearing_vector	2 0 0 -1;
+      end bearing2;
+;
+      begin bearing2;	pitch2: blade2 rotates about its -z axis with respect to hub
+        name	pitch2;
+        mbdy1	hub2 last;
+        mbdy2	blade2 1;
+        bearing_vector	2 0 0 -1;
+      end bearing2;
+;
+      begin bearing2;	pitch3: blade3 rotates about its -z axis with respect to hub
+        name	pitch3;
+        mbdy1	hub3 last;
+        mbdy2	blade3 1;
+        bearing_vector	2 0 0 -1;
+      end bearing2;
+    end constraint;
+;
+  end new_htc_structure;
+;
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------
+  begin aero;	aerodynamic forces
+    nblades	3;
+    hub_vec	shaft -3;	vector of rotor rotation direction
+    link	1 mbdy_c2_def blade1;
+    link	2 mbdy_c2_def blade2;
+    link	3 mbdy_c2_def blade3;
+    ae_filename	./data/IEC_Ya_Later_ae.dat;
+    pc_filename	./data/DTU_10MW_RWT_pc.dat;
+    induction_method	1;	0=none, 1=normal
+    aerocalc_method	1;	0=no aero calculations, 1=with aero calculations
+    aerosections	50;
+    ae_sets	1 1 1;
+    tiploss_method	1;	0=none, 1=prandtl
+    dynstall_method	2;	0=none, 1=stig øye method, 2=mhh method
+    begin bemwake_method;
+      a_ct_table	./data/a_clt_table.dat;
+    end bemwake_method;
+;
+  end aero;
+;-------------------------------------------------------------------------------------------------
+  begin hawcstab2;	commands for hawc2s/hawcstab2
+; define structure configuration
+    begin ground_fixed_substructure;
+      main_body	tower;
+      main_body	towertop;
+    end ground_fixed_substructure;
+    begin rotating_axissym_substructure;
+      main_body	shaft;
+    end rotating_axissym_substructure;
+    begin rotating_threebladed_substructure;
+      main_body	hub1;
+      main_body	blade1;
+    end rotating_threebladed_substructure;
+;
+; path to opt file, used for all commands EXCEPT compute_optimal_pitch_angle
+    operational_data_filename	./data/IEC_Ya_Later_flex.opt;	
+;
+; settings for compute_optimal_pitch_angle
+    begin operational_data;
+      windspeed	4 25 22;	cut-in [m/s], cut-out [m/s], points [-] -- used if operational_data_file_wind is 0
+      genspeed	300 425.78899032730635;	min, max generator speed [rpm]
+      gearratio	50;	gear ratio [-]
+      minpitch	0;	min. pitch angle [deg]
+      opt_lambda	7.2;	optimal TSR [-]
+      maxpow	10638.3;	rated aerodynamic power [kW]
+      prvs_turbine	1;	1=pitch-regulated, variable-speed turbine
+      operational_data_file_wind	1;	0=use wind defined in windspeed, 1=use wind defined in operational_data_filename above
+      include_torsiondeform	1;	0=rigid blade, 1=flexible blade
+      set_torque_limit	1;	no torque limits if set to 1
+    end operational_data;
+    ; 
+; HAWC2S commands (uncomment as needed)
+    output_folder	res_hawc2s;	define the folder where generated files should be saved
+    ;compute_optimal_pitch_angle	use_operational_data;	re-calculate and save opt file (pitch/rotor speed curve)
+    compute_steady_states	bladedeform tipcorrect induction nogradients;	compute steady states -- needed for aeroelastic calculations
+    save_power	;	save steady-state values to .pwr
+    ;save_induction	;	save steady-state spanwise values to .ind files, 3 for each wind speed
+    ;compute_stability_analysis	windturbine 12;	compute/save aeroelastic campbell diagram (.cmb), XX modes
+    ;save_modal_amplitude	;	save modal amplitudes and phrases to .amb file
+    compute_controller_input	;	calculate/save controller parameters (reqs. steady_states)
+    ; 
+; Need this block to call compute_controller_input
+    begin controller_tuning;
+      partial_load	0.05 0.7;	fn [hz], zeta [-]
+      full_load	0.07 0.7;	fn [hz], zeta [-]
+      gain_scheduling	2;	1 linear, 2 quadratic
+      constant_power	1;	0 constant torque, 1 constant power at full load
+    end controller_tuning;
+  end hawcstab2;
+;
+exit;
