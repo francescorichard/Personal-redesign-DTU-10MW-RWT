@@ -7,8 +7,15 @@ IEC Ya Later*
 *_hs2.htc
 *_step.htc
 *_turb.htc
-htc/**
-res/**
+htc_hawc2/**
+htc_hawc2s/**
+htc_hawc2s_ctrl/**
+htc_steady/**
+htc_turb/**
+res_hawc2s/**
+res_hawc2s_ctrl/**
+res_steady/**
+res_turb/**
 */turb/*
 */log/*
 */bodyeig/*
@@ -20,6 +27,7 @@ res/**
 *.cmb
 *.gnu
 *.mac
+*.hdf5
 
 # ignore latex files
 *.aux
